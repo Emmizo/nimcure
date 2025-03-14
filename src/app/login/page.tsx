@@ -83,7 +83,7 @@ export default function Home() {
             {/* Login button */}
             <button
   type="button" // Change type to "button" to prevent form submission
-  onClick={() => router.push('dashboard')} // Use absolute path
+  onClick={() => router.push('patients')} // Use absolute path
   className="w-full bg-blue-600 text-white py-3 rounded font-medium text-lg hover:bg-blue-700 transition-colors"
 >
   Login
