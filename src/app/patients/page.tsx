@@ -4,6 +4,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Header from '../components/header';
+import PatientForm from '../addPatients/page';
+
 
 interface Patient {
   hospitalId: string;
@@ -103,6 +105,9 @@ const PatientsPage = () => {
   const patientsPerPage = 10;
   const totalPages = Math.ceil(totalDeliveries / patientsPerPage);
 
+  const [showForm, setShowForm] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [mode, setMode] = useState<'add' | 'edit' | 'view'>('add');
   const getStatusClass = (status: Patient['status']) => {
     switch (status) {
       case 'Completed':
@@ -119,7 +124,28 @@ const PatientsPage = () => {
         return 'bg-gray-100 text-gray-800';
     }
   };
+  const handleAddPatient = () => {
+    setMode('add');
+    setSelectedPatient(null);
+    setShowForm(true);
+  };
 
+  const handleViewPatient = (patient: Patient) => {
+    setMode('view');
+    setSelectedPatient(patient);
+    setShowForm(true);
+  };
+
+  const handleEditPatient = (patient: Patient) => {
+    setMode('edit');
+    setSelectedPatient(patient);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedPatient(null);
+  };
   return (
     <div>
       <Header />
@@ -127,14 +153,14 @@ const PatientsPage = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-medium">Patients</h1>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center">
-          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-          Add Patient
-        </button>
+        <Link href="/addPatients/" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center">
+            <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Add Patient
+          </Link>
       </div>
-      
+     
       <div className="mb-6 flex justify-between items-center">
         <div className="flex items-center">
           <span className="text-sm text-gray-600 mr-2">Sort by</span>
@@ -219,7 +245,9 @@ const PatientsPage = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 border border-blue-600 px-4 py-1 rounded-md text-xs">View</button>
+                  <Link href={`/addPatients/${patient.hospitalId}`} className="text-blue-600 hover:text-blue-900 border border-blue-600 px-4 py-1 rounded-md text-xs">
+                        View
+                      </Link>
                   </td>
                 </tr>
               ))}
